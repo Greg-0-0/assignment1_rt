@@ -26,7 +26,7 @@ class UINode : public rclcpp::Node
             }
             std::cout << "Insert speed: \n";
             std::cin >> vel_;
-            }
+            
             return;
         }
         void move_turtle(){
@@ -43,6 +43,7 @@ class UINode : public rclcpp::Node
             publisher2_->publish(turtle_twist_);
             RCLCPP_INFO(this->get_logger(), "Stopping the turtle");
             timer_->cancel();
+            return;
         }
 
         rclcpp::TimerBase::SharedPtr timer_;
