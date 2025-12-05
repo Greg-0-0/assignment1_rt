@@ -30,10 +30,14 @@ class DistanceNode : public rclcpp::Node
         void topic_callback2(const turtlesim::msg::Pose::SharedPtr pos){
             pos_turtle2_ = *pos;
         }
+
+        // Computes distance between two turtles and publishes it to ui_node
         void timer_callback1(){
             distance_.data = sqrt(pow(pos_turtle1_.x - pos_turtle2_.x,2)+pow(pos_turtle1_.y - pos_turtle2_.y,2));
             publisher1_->publish(distance_);
         }
+
+        // For every border computes the orientation of the turtle1 that prevents from moving
         void timer_callback2(){
             boundary_condition_on_1_.data = 0.0;
             if(pos_turtle1_.x >= 10.0){
@@ -70,6 +74,8 @@ class DistanceNode : public rclcpp::Node
             }
             publisher2_->publish(boundary_condition_on_1_);
         }
+
+        // For every border computes the orientation of the turtle2 that prevents from moving
         void timer_callback3(){
             boundary_condition_on_2_.data = 0.0;
             if(pos_turtle2_.x >= 10.0){
@@ -106,6 +112,8 @@ class DistanceNode : public rclcpp::Node
             }
             publisher3_->publish(boundary_condition_on_2_);
         }
+
+        // Computes relative position between the two turtles and publishes it to ui_node
         void timer_callback4(){
             relative_pos_.data = 0.0;
             // Classifying each configuration of turtle1 and turtle2

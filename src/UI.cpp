@@ -24,6 +24,8 @@ class UINode : public rclcpp::Node
             main_timer_ = this->create_wall_timer(std::chrono::milliseconds(100),std::bind(&UINode::main_loop, this));
         }
     private:
+        
+        // Main loop of execution
         void main_loop(){
 
             if(!waiting_for_input_) 
@@ -38,6 +40,7 @@ class UINode : public rclcpp::Node
             waiting_for_input_ = false;
         }
 
+        // Manages textual interface
         void user_input(){
             n_robot_ = 0; vel_x_ = 0.0; vel_ang_ = 0.0;
             std::cout << "Select a robot to move it (type 1 or 2) or type 0 to quit:\n";
@@ -51,7 +54,7 @@ class UINode : public rclcpp::Node
             return;
         }
 
-        // Executes turtle rotation
+        // Applies turtle rotation
         void rotate_turtle(){
             turtle_twist_.angular.z = vel_ang_;
             if(n_robot_ == 1)
@@ -88,7 +91,7 @@ class UINode : public rclcpp::Node
             timer2_ = this->create_wall_timer(std::chrono::milliseconds(1000),std::bind(&UINode::timer_callback2, this));
         }
         
-        // Triggers after 1 second from linear movement start to stop turtle translation
+        // Triggers after 1 second from start of linear movement to stop turtle translation
         void timer_callback2(){
             
             stop_linear_motion();
@@ -96,7 +99,7 @@ class UINode : public rclcpp::Node
             waiting_for_input_ = true;
         }
 
-        // Stops turtle translation (need a specific function since it could even stop before the 1 second timer elapses)
+        // Stops turtle translation (need a specific function since it could stop before the 1 second timer elapses)
         void stop_linear_motion(){
             turtle_twist_.linear.x = 0.0;
             publisher1_->publish(turtle_twist_);
